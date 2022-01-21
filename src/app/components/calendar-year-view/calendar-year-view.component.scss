@@ -1,0 +1,55 @@
+$color-red: #fc3d33;
+$color-black: #292929;
+$color-dark-grey: #808080;
+:host {
+  .current-year {
+    padding: 10px 0px 0px 10px;
+    font-weight: 400;
+    font-size: 30px;
+  }
+
+  .month-name {
+    color: $color-red;
+    font-weight: 300;
+    padding-left: 13px;
+    padding-bottom: 15px;
+  }
+
+  .week-name {
+    color: $color-dark-grey;
+    font-weight: 400;
+    padding-bottom: 15px;
+    font-size: 13px;
+  }
+
+  .month-date {
+    color: $color-black;
+    font-weight: 500;
+  }
+
+  .other-month-date {
+    color: #bfbfbf;
+  }
+
+  .weekend-date {
+    color: $color-dark-grey;
+  }
+
+  .today-date {
+    background-color: $color-red;
+    color: white;
+    border-radius: 50%;
+    padding: 3px;
+    &:hover {
+      color: $color-black !important;
+    }
+  }
+
+  .days {
+    font-size: 14px;
+    &:hover {
+      color: $color-red;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,68 @@
+<div class="">
+  <ng-container *ngFor="let calendarYear of calendarData | keyvalue">
+    <h1 class="current-year">{{ calendarYear.key }}</h1>
+    <ng-container
+      *ngTemplateOutlet="
+        yearTemplate;
+        context: { calendarYear: calendarYear.value }
+      "
+    ></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #yearTemplate let-calendarYear="calendarYear">
+  <div class="container">
+    <div class="row">
+      <ng-container
+        *ngFor="let calendarMonthData of calendarYear | keyvalue: asIsOrder"
+      >
+        <ng-container
+          *ngTemplateOutlet="
+            monthTemplate;
+            context: { calendarMonthData: calendarMonthData.value }
+          "
+        ></ng-container>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #monthTemplate let-calendarMonthData="calendarMonthData">
+  <div class="col-lg-3 p-4">
+    <h4 class="month-name">{{ calendarMonthData.monthName }}</h4>
+    <table class="w-100">
+      <thead>
+        <tr>
+          <th
+            class="week-name text-center"
+            *ngFor="let day of daysofWeek | enumArray"
+          >
+            {{ day }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let row of calendarMonthData.calendarDays?.allDays | splitDays;
+            let i = index
+          "
+        >
+          <td class="text-center" *ngFor="let c of row; let j = index">
+            <span
+              [ngClass]="
+                getDateClass(
+                  c,
+                  calendarMonthData.monthStartDate,
+                  calendarMonthData.monthEndDate
+                )
+              "
+              class="days"
+              >{{ c.getDate() }}</span
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>
