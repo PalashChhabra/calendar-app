@@ -1,0 +1,53 @@
+<div class="container-fluid">
+  <div class="row">
+    <ng-container *ngFor="let monthInfo of yearData | keyvalue: asIsOrder">
+      <div class="month-name">
+        {{ monthInfo.value.monthName }}
+        <span class="year-name"> {{ selectedYear }}</span>
+      </div>
+      <ng-container
+        *ngTemplateOutlet="
+          monthTemplate;
+          context: { monthData: monthInfo.value }
+        "
+      ></ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #monthTemplate let-monthData="monthData">
+  <div class="col-12 pb-5">
+    <table class="w-100">
+      <thead>
+        <tr>
+          <th
+            class="week-name text-center"
+            *ngFor="let day of daysofWeek | keyvalue: asIsOrder"
+          >
+            {{ day.key }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let row of monthData.calendarDays?.allDays | splitDays;
+            let i = index
+          "
+        >
+          <td
+            class="text-center border-cell table-cell-date"
+            [ngClass]="
+              getDateClass(c, monthData.monthStartDate, monthData.monthEndDate)
+            "
+            *ngFor="let c of row; let j = index"
+          >
+            <span class="days relative-position-day">
+              {{ c.getDate() }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>

@@ -24,30 +24,4 @@
     color: $color-black;
     font-weight: 500;
   }
-
-  .other-month-date {
-    color: $color-light-grey;
-  }
-
-  .weekend-date {
-    color: $color-dark-grey;
-  }
-
-  .today-date {
-    background-color: $color-red;
-    color: $color-white;
-    border-radius: 50%;
-    padding: 3px;
-    &:hover {
-      color: $color-black !important;
-    }
-  }
-
-  .days {
-    font-size: 14px;
-    &:hover {
-      color: $color-red;
-      cursor: pointer;
-    }
-  }
 }

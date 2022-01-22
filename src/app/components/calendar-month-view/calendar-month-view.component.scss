@@ -1,0 +1,44 @@
+@import "src/variables";
+:host {
+  .month-name {
+    padding-left: 20px;
+    font-weight: 700;
+    font-size: 30px;
+    padding-bottom: 20px;
+    .year-name {
+      font-weight: 200;
+    }
+  }
+  .border-cell {
+    border: 1px solid $color-border-grey;
+    height: 120px;
+    width: 10%;
+    background-color: $color-white;
+  }
+  .relative-position-day {
+    position: relative;
+    top: -35px;
+    right: -75px;
+    font-size: 18px;
+  }
+
+  .table-cell-date {
+    &.weekend-date {
+      background-color: $color-cell-grey;
+    }
+    &.today-date {
+      background-color: none;
+      border-radius: 0;
+      padding: 0px;
+
+      .relative-position-day {
+        background-color: $color-red;
+        padding: 5px;
+        border-radius: 50%;
+        &:hover {
+          color: $color-black !important;
+        }
+      }
+    }
+  }
+}

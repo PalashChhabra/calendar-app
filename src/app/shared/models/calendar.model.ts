@@ -1,7 +1,4 @@
 export interface CalendarDays {
-  previousMonthDays: Date[];
-  currentMonthDays: Date[];
-  nextMonthDays: Date[];
   allDays: Date[];
 }
 export interface MonthData {

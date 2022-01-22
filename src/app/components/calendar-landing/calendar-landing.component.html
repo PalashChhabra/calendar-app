@@ -3,3 +3,16 @@
   [calendarData]="calendarData"
   *ngIf="viewTypes['Year'] === viewIndex"
 ></app-calendar-year-view>
+<app-calendar-month-view
+  [yearData]="calendarData ? calendarData[selectedYear] : []"
+  [selectedYear]="selectedYear"
+  *ngIf="viewTypes['Month'] === viewIndex"
+></app-calendar-month-view>
+
+<div *ngIf="viewTypes['Day'] === viewIndex || viewTypes['Week'] === viewIndex">
+  <div class="container">
+    <div class="col-12 text-center pt-5 font-monospace">
+      This was just a proof of concept, this view will be developed later :)
+    </div>
+  </div>
+</div>

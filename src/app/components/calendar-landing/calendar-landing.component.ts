@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { isValid, previousMonday, addDays } from 'date-fns';
 import { Subscription } from 'rxjs';
 import {
-  Days,
   EXTRA_YEARS_TO_LOAD,
   MAX_DISPLAY_DAYS,
   ViewTypes,
