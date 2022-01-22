@@ -1,0 +1,38 @@
+@import "src/variables";
+:host {
+  .selection-background {
+    height: 40px;
+    background: $color-white;
+    border-bottom: 1px solid $color-light-grey;
+    text-align: center;
+  }
+  .btn-group {
+    padding: 7px;
+    & .btn-group-item {
+      width: 80px;
+      font-size: 14px;
+      background-color: $color-white;
+      border: 0.1px solid $color-border-grey;
+      color: $color-dark-grey;
+      cursor: pointer;
+      &.active-button {
+        background-color: #f2f2f2;
+        color: #484848;
+      }
+      &:first-child {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+      }
+      &:last-child {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+      }
+      &:not(:last-child) {
+        border-right: none;
+      }
+      &:hover {
+        background-color: $color-border-grey;
+      }
+    }
+  }
+}

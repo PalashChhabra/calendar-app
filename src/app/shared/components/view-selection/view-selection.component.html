@@ -1,0 +1,13 @@
+<div class="sticky-top w-100 selection-background">
+  <div class="btn-group">
+    <ng-container *ngFor="let viewName of viewTypes | enumArray; let i = index">
+      <button
+        class="btn-group-item"
+        [ngClass]="{ 'active-button': selectedIndex === i }"
+        (click)="changeView(i)"
+      >
+        {{ viewName }}
+      </button>
+    </ng-container>
+  </div>
+</div>

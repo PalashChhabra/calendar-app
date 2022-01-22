@@ -1,6 +1,4 @@
-$color-red: #fc3d33;
-$color-black: #292929;
-$color-dark-grey: #808080;
+@import "src/variables";
 :host {
   .current-year {
     padding: 10px 0px 0px 10px;
@@ -28,7 +26,7 @@ $color-dark-grey: #808080;
   }
 
   .other-month-date {
-    color: #bfbfbf;
+    color: $color-light-grey;
   }
 
   .weekend-date {
@@ -37,7 +35,7 @@ $color-dark-grey: #808080;
 
   .today-date {
     background-color: $color-red;
-    color: white;
+    color: $color-white;
     border-radius: 50%;
     padding: 3px;
     &:hover {

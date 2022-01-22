@@ -1,5 +1,5 @@
 <div class="">
-  <ng-container *ngFor="let calendarYear of calendarData | keyvalue">
+  <ng-container *ngFor="let calendarYear of calendarData | keyvalue: asIsOrder">
     <h1 class="current-year">{{ calendarYear.key }}</h1>
     <ng-container
       *ngTemplateOutlet="
@@ -35,9 +35,9 @@
         <tr>
           <th
             class="week-name text-center"
-            *ngFor="let day of daysofWeek | enumArray"
+            *ngFor="let day of daysofWeek | keyvalue: asIsOrder"
           >
-            {{ day }}
+            {{ day.value }}
           </th>
         </tr>
       </thead>

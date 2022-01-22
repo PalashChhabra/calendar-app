@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CalendarLandingComponent } from './components/calendar-landing/calendar-landing.component';
 import { CalendarYearViewComponent } from './components/calendar-year-view/calendar-year-view.component';
 
 const routes: Routes = [
@@ -10,11 +11,11 @@ const routes: Routes = [
   },
   {
     path: 'calendar/:year',
-    component: CalendarYearViewComponent,
+    component: CalendarLandingComponent,
   },
   {
     path: 'calendar',
-    component: CalendarYearViewComponent,
+    component: CalendarLandingComponent,
   },
 ];
 
