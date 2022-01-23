@@ -1,5 +1,6 @@
 # Calendar App- Palash
 
+Watch Live at : [Palash - Calendar](https://calendar-palash.netlify.app/) [![Netlify Status](https://api.netlify.com/api/v1/badges/c98c9691-d038-4776-9c25-d4775e0c90b6/deploy-status)](https://app.netlify.com/sites/calendar-palash/deploys)
 This is a sample app that displays a calendar which is similar in style to Apple style calendar building with the following technology stack:
 
 - Typescript for type checking
