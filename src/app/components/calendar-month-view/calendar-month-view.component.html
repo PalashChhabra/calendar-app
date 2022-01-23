@@ -1,17 +1,12 @@
 <div class="container-fluid">
   <div class="row">
-    <ng-container *ngFor="let monthInfo of yearData | keyvalue: asIsOrder">
-      <div class="month-name">
-        {{ monthInfo.value.monthName }}
-        <span class="year-name"> {{ selectedYear }}</span>
-      </div>
-      <ng-container
-        *ngTemplateOutlet="
-          monthTemplate;
-          context: { monthData: monthInfo.value }
-        "
-      ></ng-container>
-    </ng-container>
+    <div class="month-name">
+      {{ monthData.monthName }}
+      <span class="year-name"> {{ selectedYear }}</span>
+    </div>
+    <ng-container
+      *ngTemplateOutlet="monthTemplate; context: { monthData: monthData }"
+    ></ng-container>
   </div>
 </div>
 

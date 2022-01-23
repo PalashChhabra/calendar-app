@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { isToday, isBefore, isAfter, isWeekend } from 'date-fns';
 import { Days } from 'src/app/shared/data';
-import { YearData } from 'src/app/shared/models';
+import { MonthData } from 'src/app/shared/models';
 
 @Component({
   selector: 'app-calendar-month-view',
@@ -9,15 +9,13 @@ import { YearData } from 'src/app/shared/models';
   styleUrls: ['./calendar-month-view.component.scss'],
 })
 export class CalendarMonthViewComponent implements OnInit {
-  @Input() yearData: YearData;
+  @Input() monthData: MonthData;
   @Input() selectedYear: number;
 
   daysofWeek = Days;
   constructor() {}
 
-  ngOnInit(): void {
-    console.log(this.yearData);
-  }
+  ngOnInit(): void {}
 
   asIsOrder() {
     return 1;

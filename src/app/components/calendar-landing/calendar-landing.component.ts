@@ -6,6 +6,7 @@ import {
   DateChangeTypes,
   EXTRA_YEARS_TO_LOAD,
   MAX_DISPLAY_DAYS,
+  Months,
   ViewTypes,
 } from 'src/app/shared/data';
 import { Calendar, CalendarDays } from 'src/app/shared/models';
@@ -22,6 +23,7 @@ export class CalendarLandingComponent implements OnInit, OnDestroy {
 
   routeSubscription: Subscription;
   selectedYear: number;
+  selectedMonth: number = 0;
   calendarData: Calendar;
   yearsLoaded = 0;
   dateChangeTypes = DateChangeTypes;
@@ -104,27 +106,63 @@ export class CalendarLandingComponent implements OnInit, OnDestroy {
     const currentView = this.viewIndex;
     //Year View
     if (currentView === ViewTypes['Year']) {
-      let dataYearToLoad = this.selectedYear;
-      if (changeType === DateChangeTypes['Previous']) {
+      this.changeYear(changeType);
+    }
+    //Month View
+    if (currentView === ViewTypes['Month']) {
+      this.changeMonth(changeType);
+    }
+  }
+
+  async changeYear(changeType: DateChangeTypes) {
+    let dataYearToLoad = this.selectedYear;
+    if (changeType === DateChangeTypes['Previous']) {
+      this.selectedYear = this.selectedYear - 1;
+      dataYearToLoad = this.selectedYear;
+    } else if (changeType === DateChangeTypes['Today']) {
+      this.selectedYear = new Date().getFullYear();
+      dataYearToLoad = this.selectedYear;
+    } else if (changeType === DateChangeTypes['Next']) {
+      this.selectedYear = this.selectedYear + 1;
+      dataYearToLoad = this.selectedYear + EXTRA_YEARS_TO_LOAD;
+    }
+    this.setCalendarSlice(dataYearToLoad);
+  }
+
+  async setCalendarSlice(yearToLoad: number) {
+    const data = await this.populateYear(yearToLoad);
+    let startPosition = Object.keys(data).indexOf(`${this.selectedYear}`);
+    let endPosition = startPosition + EXTRA_YEARS_TO_LOAD + 1;
+
+    this.calendarData = await this.sliceCalendarData(
+      data,
+      startPosition,
+      endPosition
+    );
+  }
+
+  async changeMonth(changeType: DateChangeTypes) {
+    let monthToLoad = this.selectedMonth;
+    if (changeType === DateChangeTypes['Previous']) {
+      monthToLoad = this.selectedMonth - 1;
+      if (monthToLoad < Months['January']) {
         this.selectedYear = this.selectedYear - 1;
-        dataYearToLoad = this.selectedYear;
-      } else if (changeType === DateChangeTypes['Today']) {
-        this.selectedYear = new Date().getFullYear();
-        dataYearToLoad = this.selectedYear;
-      } else if (changeType === DateChangeTypes['Next']) {
-        this.selectedYear = this.selectedYear + 1;
-        dataYearToLoad = this.selectedYear + EXTRA_YEARS_TO_LOAD;
+        this.setCalendarSlice(this.selectedYear);
+        monthToLoad = Months['December'];
       }
-
-      const data = await this.populateYear(dataYearToLoad);
-      let startPosition = Object.keys(data).indexOf(`${this.selectedYear}`);
-      let endPosition = startPosition + EXTRA_YEARS_TO_LOAD + 1;
-
-      this.calendarData = await this.sliceCalendarData(
-        data,
-        startPosition,
-        endPosition
-      );
+      this.selectedMonth = monthToLoad;
+    } else if (changeType === DateChangeTypes['Today']) {
+      this.selectedYear = new Date().getFullYear();
+      this.setCalendarSlice(this.selectedYear);
+      this.selectedMonth = new Date().getMonth();
+    } else if (changeType === DateChangeTypes['Next']) {
+      monthToLoad = this.selectedMonth + 1;
+      if (monthToLoad > Months['December']) {
+        this.selectedYear = this.selectedYear + 1;
+        this.setCalendarSlice(this.selectedYear);
+        monthToLoad = Months['January'];
+      }
+      this.selectedMonth = monthToLoad;
     }
   }
 

@@ -3,7 +3,9 @@
   <button
     class="btn-change-date previous"
     (click)="changeDate(dateChangeTypes.Previous)"
-    [disabled]="selectedYear === 0"
+    [disabled]="
+      selectedYear === 0 || (selectedYear === 1 && selectedMonth === 0)
+    "
   >
     &lt;
   </button>
@@ -26,7 +28,7 @@
   *ngIf="viewTypes['Year'] === viewIndex"
 ></app-calendar-year-view>
 <app-calendar-month-view
-  [yearData]="calendarData ? calendarData[selectedYear] : []"
+  [monthData]="calendarData[selectedYear][selectedMonth]"
   [selectedYear]="selectedYear"
   *ngIf="viewTypes['Month'] === viewIndex"
 ></app-calendar-month-view>
