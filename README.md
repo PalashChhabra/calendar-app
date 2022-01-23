@@ -1,45 +1,43 @@
-# Holition Front-end Test - Calendar - Palash
+# Calendar App- Palash
 
-This test is about building a calendar viewer similar in style to Apple Calendar **without using third party libraries**. We would love to see **good architecture, nice styling, correct routing and creative solutions**.
+This is a sample app that displays a calendar which is similar in style to Apple style calendar building with the following technology stack:
 
-The UI images attached are for guidance, they don't need to be copied exactly.
-But we do want to know your **skills with layouts**. For example, styling the different days as:
+- Typescript for type checking
+- Angular 12 for Front-end
+- Scss for styling and animations
 
-- days in the month
-- weekends in the month
-- days showed on the month that belongs to other months
-- animations should be used, such as on hover, etc.
+## Highlights
 
-It is not required for everything to be completed if you are getting stuck on one part move on to other parts.
-Unfinsihed parts we can simply talk about in the **review code interview**.
-Don't spend an unreasonable about of time on this. Certainly nothing more than 10 hours.
+- The application follows the route of calendar/[year] and displays the year view for the passed year. If an invalid year is passed, the application renders the result for current year.
+- Wrong route is handled through a 404 page.
+- A date change component is developed which allows to move to next / previous and current date.
+- The style is responsive and can be viewed on different resolutions.
 
-## UI
+## Views
 
-### By year
+Two views have been developed :
 
-- As the year changes it should update the routing.
-- (Mobile) Again the 2 buttons on the top right are not expected to do anything
-- (Desktop) _< Today >_ should functions for moving the year, today taking you to the current year.
-- (Desktop) the top search bar, plus is not required to do anything.
-- page should be scrollable, either just in time loading in the years, or just load up to the next ~2 years.
+- Years View - Displays months / dates for a year and for next ~2 years \_ _(configurable)_ \_
+- Month View - Displays one month in a year
 
-#### Mobile
-
-![](/doc/ui/mobile-year.png)
-
-#### Desktop
+## Screenshots
 
 ![](/doc/ui/desktop-year.png)
+![](/doc/ui/desktop-month.png)
+![](/doc/ui/mobile-year.png)
+![](/doc/ui/mobile-month.png)
 
-## Routing
+## Suggested Improvements
 
-The page should using routing following the below scheme.
+- Days and Weeks view : Not completed due to lack of time, can be progressed further
+- Components Enhancements : The date change selector can be moved to a seprate component
+- Unit / Cross Browser Testing : Test cases can be matured with time
 
-- /calendar
-- /calendar/[year]
+## How to setup
 
-| Examples       |                                    |
-| -------------- | ---------------------------------- |
-| /calendar      | auto redirects to the current year |
-| /calendar/2022 | shows the year view                |
+```
+Step : 1 - Clone the repository and change directory to root (Node >=10 should be installed)
+Step : 2 - Install node modules using npm i or yarn install
+Step : 3 - Serve the app locally using npm start or yarn start
+Step : 4 - Pass the year in the route calendar/[year] for the year you want to view the calendar for
+```
