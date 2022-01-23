@@ -1,4 +1,6 @@
 @import "src/variables";
+@import "src/mixins";
+
 :host {
   .month-name {
     padding-left: 20px;
@@ -8,6 +10,13 @@
     .year-name {
       font-weight: 200;
     }
+    @include screen-mobile {
+      font-size: 18px;
+      padding-top: 15px;
+    }
+  }
+  .text-right {
+    text-align: right;
   }
   .border-cell {
     border: 1px solid $color-border-grey;
@@ -16,24 +25,26 @@
     background-color: $color-white;
   }
   .relative-position-day {
-    position: relative;
-    top: -35px;
-    right: -75px;
-    font-size: 18px;
+    .days {
+      font-size: 16px;
+    }
+    text-align: right;
+    vertical-align: top;
+    padding: 5px 10px 0px 0px;
   }
 
   .table-cell-date {
     &.weekend-date {
       background-color: $color-cell-grey;
     }
-    &.today-date {
+    &.today-date.relative-position-day {
       background-color: none;
       border-radius: 0;
       padding: 0px;
 
-      .relative-position-day {
+      .days {
         background-color: $color-red;
-        padding: 5px;
+        padding: 2px;
         border-radius: 50%;
         &:hover {
           color: $color-black !important;

@@ -1,0 +1,17 @@
+//--------------------------------------------------
+// [Responsive]
+//--------------------------------------------------
+
+// usage : @include screen-mobile-above {...}
+@mixin screen-mobile-above {
+  @media only screen and (min-width: 767px) {
+    @content;
+  }
+}
+
+// usage : @include screen-mobile {...}
+@mixin screen-mobile {
+  @media only screen and (max-width: 767px) {
+    @content;
+  }
+}

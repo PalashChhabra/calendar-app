@@ -16,7 +16,7 @@
       <thead>
         <tr>
           <th
-            class="week-name text-center"
+            class="week-name text-right"
             *ngFor="let day of daysofWeek | keyvalue: asIsOrder"
           >
             {{ day.key }}
@@ -31,13 +31,13 @@
           "
         >
           <td
-            class="text-center border-cell table-cell-date"
+            class="relative-position-day border-cell table-cell-date"
             [ngClass]="
               getDateClass(c, monthData.monthStartDate, monthData.monthEndDate)
             "
             *ngFor="let c of row; let j = index"
           >
-            <span class="days relative-position-day">
+            <span class="days">
               {{ c.getDate() }}
             </span>
           </td>
