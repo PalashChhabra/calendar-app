@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { isValid, previousMonday, addDays } from 'date-fns';
 import { Subscription } from 'rxjs';
 import {
@@ -11,6 +11,7 @@ import {
 } from 'src/app/shared/data';
 import { Calendar, CalendarDays } from 'src/app/shared/models';
 import { YearService } from 'src/app/shared/services';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-calendar-landing',
@@ -22,38 +23,53 @@ export class CalendarLandingComponent implements OnInit, OnDestroy {
   viewIndex: number = ViewTypes['Year'];
 
   routeSubscription: Subscription;
+  routerEventSubscription: Subscription;
   selectedYear: number;
   selectedMonth: number = 0;
   calendarData: Calendar;
   yearsLoaded = 0;
   dateChangeTypes = DateChangeTypes;
+  baseRoute = environment.baseRoute;
 
   constructor(
     private route: ActivatedRoute,
-    private yearService: YearService
-  ) {}
-
-  async ngOnInit() {
-    //Get Year Param
-    this.routeSubscription = this.route.params.subscribe((params) => {
-      const dateParam = `${params?.year}-01-01`;
-      if (params?.year && isValid(new Date(dateParam)) && +params?.year > 0) {
-        this.selectedYear = +params?.year;
-      } else {
-        // set Current Year as default
-        this.selectedYear = new Date().getFullYear();
+    private yearService: YearService,
+    private router: Router
+  ) {
+    this.routerEventSubscription = router.events.subscribe(async (val) => {
+      if (val instanceof NavigationEnd) {
+        this.calendarData = {};
+        //Get Year Param
+        this.routeSubscription = this.route.params.subscribe((params) => {
+          const dateParam = `${params?.year}-01-01`;
+          if (
+            params?.year &&
+            isValid(new Date(dateParam)) &&
+            +params?.year > 0
+          ) {
+            this.selectedYear = +params?.year;
+          } else {
+            // set Current Year as default
+            this.selectedYear = new Date().getFullYear();
+          }
+        });
+        // populate data for selected year
+        const data = await this.populateNextYearsData(this.selectedYear);
+        this.setCalendarSlice(data);
       }
     });
-    // populate data for selected year
-    this.calendarData = await this.populateNextYearsData(this.selectedYear);
   }
+
+  async ngOnInit() {}
 
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
+    this.routerEventSubscription?.unsubscribe();
   }
 
   async populateNextYearsData(year: number) {
     let loadedData: Calendar = {};
+    this.yearsLoaded = 0;
     do {
       const yearToLoad = year + this.yearsLoaded;
       loadedData = await this.populateYear(yearToLoad);
@@ -115,22 +131,17 @@ export class CalendarLandingComponent implements OnInit, OnDestroy {
   }
 
   async changeYear(changeType: DateChangeTypes) {
-    let dataYearToLoad = this.selectedYear;
     if (changeType === DateChangeTypes['Previous']) {
       this.selectedYear = this.selectedYear - 1;
-      dataYearToLoad = this.selectedYear;
     } else if (changeType === DateChangeTypes['Today']) {
       this.selectedYear = new Date().getFullYear();
-      dataYearToLoad = this.selectedYear;
     } else if (changeType === DateChangeTypes['Next']) {
       this.selectedYear = this.selectedYear + 1;
-      dataYearToLoad = this.selectedYear + EXTRA_YEARS_TO_LOAD;
     }
-    this.setCalendarSlice(dataYearToLoad);
+    this.router.navigateByUrl(`${this.baseRoute}/${this.selectedYear}`);
   }
 
-  async setCalendarSlice(yearToLoad: number) {
-    const data = await this.populateYear(yearToLoad);
+  async setCalendarSlice(data: Calendar) {
     let startPosition = Object.keys(data).indexOf(`${this.selectedYear}`);
     let endPosition = startPosition + EXTRA_YEARS_TO_LOAD + 1;
 
@@ -147,19 +158,19 @@ export class CalendarLandingComponent implements OnInit, OnDestroy {
       monthToLoad = this.selectedMonth - 1;
       if (monthToLoad < Months['January']) {
         this.selectedYear = this.selectedYear - 1;
-        this.setCalendarSlice(this.selectedYear);
+        this.router.navigateByUrl(`${this.baseRoute}/${this.selectedYear}`);
         monthToLoad = Months['December'];
       }
       this.selectedMonth = monthToLoad;
     } else if (changeType === DateChangeTypes['Today']) {
       this.selectedYear = new Date().getFullYear();
-      this.setCalendarSlice(this.selectedYear);
+      this.router.navigateByUrl(`${this.baseRoute}/${this.selectedYear}`);
       this.selectedMonth = new Date().getMonth();
     } else if (changeType === DateChangeTypes['Next']) {
       monthToLoad = this.selectedMonth + 1;
       if (monthToLoad > Months['December']) {
         this.selectedYear = this.selectedYear + 1;
-        this.setCalendarSlice(this.selectedYear);
+        this.router.navigateByUrl(`${this.baseRoute}/${this.selectedYear}`);
         monthToLoad = Months['January'];
       }
       this.selectedMonth = monthToLoad;
