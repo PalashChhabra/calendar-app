@@ -38,7 +38,7 @@ Two views have been developed :
 
 ```
 Step : 1 - Clone the repository and change directory to root (Node >=10 should be installed)
-Step : 2 - Install node modules using npm i or yarn install
+Step : 2 - Install node modules using npm i or yarn install (delete packlage-lock.json if installation fails)
 Step : 3 - Serve the app locally using npm start or yarn start
 Step : 4 - Pass the year in the route calendar/[year] for the year you want to view the calendar for
 ```
