@@ -1,4 +1,26 @@
-<app-view-selection (viewChanged)="OnViewChanged($event)"></app-view-selection>
+<app-view-selection (viewChanged)="onViewChanged($event)"></app-view-selection>
+<div class="change-date-group-btn">
+  <button
+    class="btn-change-date previous"
+    (click)="changeDate(dateChangeTypes.Previous)"
+    [disabled]="selectedYear === 0"
+  >
+    &lt;
+  </button>
+  <button
+    class="btn-change-date today"
+    (click)="changeDate(dateChangeTypes.Today)"
+  >
+    Today
+  </button>
+  <button
+    class="btn-change-date next"
+    (click)="changeDate(dateChangeTypes.Next)"
+  >
+    &gt;
+  </button>
+</div>
+
 <app-calendar-year-view
   [calendarData]="calendarData"
   *ngIf="viewTypes['Year'] === viewIndex"

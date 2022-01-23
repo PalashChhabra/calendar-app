@@ -4,3 +4,9 @@ export enum ViewTypes {
   'Month',
   'Year',
 }
+
+export enum DateChangeTypes {
+  Previous = 'previous',
+  Next = 'next',
+  Today = 'today',
+}

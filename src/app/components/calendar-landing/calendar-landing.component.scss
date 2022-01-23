@@ -1,0 +1,24 @@
+@import "src/variables";
+:host {
+  .change-date-group-btn {
+    position: absolute;
+    right: 20px;
+    top: 55px;
+    .btn-change-date {
+      border: 1px solid $color-border-grey;
+      background: $color-white;
+      font-size: 14px;
+      border-radius: 5px;
+      &.today {
+        width: 70px;
+      }
+      &:hover {
+        cursor: pointer;
+        background: $color-cell-grey;
+      }
+      &:disabled {
+        cursor: not-allowed;
+      }
+    }
+  }
+}

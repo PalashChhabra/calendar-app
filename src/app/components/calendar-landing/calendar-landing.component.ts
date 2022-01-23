@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { isValid, previousMonday, addDays } from 'date-fns';
 import { Subscription } from 'rxjs';
 import {
+  DateChangeTypes,
   EXTRA_YEARS_TO_LOAD,
   MAX_DISPLAY_DAYS,
   ViewTypes,
@@ -23,6 +24,7 @@ export class CalendarLandingComponent implements OnInit, OnDestroy {
   selectedYear: number;
   calendarData: Calendar;
   yearsLoaded = 0;
+  dateChangeTypes = DateChangeTypes;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,36 +43,46 @@ export class CalendarLandingComponent implements OnInit, OnDestroy {
       }
     });
     // populate data for selected year
-    await this.populateYear(this.selectedYear);
+    this.calendarData = await this.populateNextYearsData(this.selectedYear);
   }
 
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
   }
 
-  async populateYear(year: number) {
-    if (this.yearsLoaded > EXTRA_YEARS_TO_LOAD) {
-      return;
-    }
-    await this.yearService.populateYearData(year).then((calendarData) => {
-      this.calendarData = calendarData;
-      Object.entries(calendarData[year]).forEach(async (entry) => {
-        await this.generateCalendarDays(year, +entry[0]);
-      });
-    });
-
-    this.yearsLoaded++;
-    this.populateYear(year + 1);
+  async populateNextYearsData(year: number) {
+    let loadedData: Calendar = {};
+    do {
+      const yearToLoad = year + this.yearsLoaded;
+      loadedData = await this.populateYear(yearToLoad);
+      this.yearsLoaded++;
+    } while (this.yearsLoaded <= EXTRA_YEARS_TO_LOAD);
+    return loadedData;
   }
 
-  async generateCalendarDays(year: number, monthIndex: number) {
+  async populateYear(year: number) {
+    let data: Calendar = {};
+    await this.yearService.populateYearData(year).then((calendarData) => {
+      data = calendarData;
+      Object.entries(calendarData[year]).forEach(async (entry) => {
+        data = await this.generateCalendarDays(data, year, +entry[0]);
+      });
+    });
+    return data;
+  }
+
+  async generateCalendarDays(
+    calendarData: Calendar,
+    year: number,
+    monthIndex: number
+  ) {
     const firstDayOfMonth = new Date(year, monthIndex);
 
     //get Starting date of previous Month
     const startDatePrevMonth = previousMonday(firstDayOfMonth);
 
     let dateCounter = startDatePrevMonth;
-    this.calendarData[year][monthIndex].calendarDays = {
+    calendarData[year][monthIndex].calendarDays = {
       nextMonthDays: [],
       previousMonthDays: [],
       currentMonthDays: [],
@@ -78,15 +90,56 @@ export class CalendarLandingComponent implements OnInit, OnDestroy {
     } as CalendarDays;
 
     for (let i = 1; i <= MAX_DISPLAY_DAYS; i++) {
-      this.calendarData[year][monthIndex].calendarDays?.allDays.push(
-        dateCounter
-      );
+      calendarData[year][monthIndex].calendarDays?.allDays.push(dateCounter);
       dateCounter = addDays(dateCounter, 1);
+    }
+    return calendarData;
+  }
+
+  onViewChanged(selectedView: number) {
+    this.viewIndex = selectedView;
+  }
+
+  async changeDate(changeType: DateChangeTypes) {
+    const currentView = this.viewIndex;
+    //Year View
+    if (currentView === ViewTypes['Year']) {
+      let dataYearToLoad = this.selectedYear;
+      if (changeType === DateChangeTypes['Previous']) {
+        this.selectedYear = this.selectedYear - 1;
+        dataYearToLoad = this.selectedYear;
+      } else if (changeType === DateChangeTypes['Today']) {
+        this.selectedYear = new Date().getFullYear();
+        dataYearToLoad = this.selectedYear;
+      } else if (changeType === DateChangeTypes['Next']) {
+        this.selectedYear = this.selectedYear + 1;
+        dataYearToLoad = this.selectedYear + EXTRA_YEARS_TO_LOAD;
+      }
+
+      const data = await this.populateYear(dataYearToLoad);
+      let startPosition = Object.keys(data).indexOf(`${this.selectedYear}`);
+      let endPosition = startPosition + EXTRA_YEARS_TO_LOAD + 1;
+
+      this.calendarData = await this.sliceCalendarData(
+        data,
+        startPosition,
+        endPosition
+      );
     }
   }
 
-  OnViewChanged(selectedView: number) {
-    this.viewIndex = selectedView;
+  async sliceCalendarData(
+    data: Calendar,
+    startPosition: number,
+    endPosition: number
+  ) {
+    const sliced = Object.keys(data)
+      .slice(startPosition, endPosition)
+      .reduce((result: any, key: any) => {
+        result[key] = data[key];
+        return result;
+      }, {});
+    return sliced;
   }
 
   // Can do Later :: Can use this function to calculate first Monday
